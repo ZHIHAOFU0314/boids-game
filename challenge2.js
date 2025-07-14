@@ -787,7 +787,7 @@ function mousePressed() {
     ) {
       if (levelPassed) {
         saveLevelRecord(2);
-        window.location.href = 'challenge3.html';
+        window.location.href = 'level3intro.html';
       } else {
         localStorage.removeItem('tmpRecord');
         window.location.href = 'main.html';
