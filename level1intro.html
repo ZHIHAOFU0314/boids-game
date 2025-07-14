@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>First Level: Migratory Birds Flying South - Level Description</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(180deg, #FF7814 0%, #500057 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    .container {
+      width: 80%;
+      max-width: 800px;
+      background: #6B4F30;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      padding: 24px;
+      color: #FFF8E7;
+      position: relative;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+    h1 {
+      margin-top: 0;
+      color: #FFF;
+      text-align: center;
+    }
+    .section {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+    .section .text {
+      flex: 1 1 55%;
+      max-width: 55%;
+    }
+    .section.full-text .text {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+    .section .guide-img {
+      flex: 1 1 40%;
+      max-width: 40%;
+      border-radius: 8px;
+      margin-left: 16px;
+      object-fit: cover;
+    }
+    .section strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #FFEB99;
+    }
+    .guide-img {
+      width: 100%;
+      border-radius: 8px;
+      margin: 12px 0;
+      object-fit: cover;
+    }
+    .loader {
+      position: relative;
+      width: 100%;
+      height: 16px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 32px 0 16px;
+    }
+    .loader .progress {
+      width: 0%;
+      height: 100%;
+      background: #4caf50;
+      transition: width 8s linear;
+    }
+    .loader .label {
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      color: #fff;
+      font-size: 12px;
+      line-height: 16px;
+    }
+    #startBtn {
+      display: none;
+      padding: 12px 32px;
+      /* 淡棕色，模拟木纹色 */
+      background: #D2B48C;
+      color: #4A2C0A;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 16px auto 0;
+    }
+    /* 悬停时略深一些 */
+    #startBtn:hover {
+      background: #C19A6B;
+    }
+    #startBtn:hover { background: #43a047; }
+    /* 全宽文本布局 */
+    .section.full-text .text {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>First level: Migratory birds flying south</h1>
+    <div class="section full-text">
+      <div class="text">
+        <strong>Round introduce</strong>
+        <p>In this level, flocks of migratory birds will 
+          cross rugged mountains and windmill fields 
+          as they migrate south to escape the harsh winter. 
+          During their journey, you will need to guide them to avoid
+           towering peaks and rapidly spinning blades,
+           while also searching for and collecting rare fruits in the air to increase the size of the flock.</p>
+      </div>
+    </div>
+
+    <!-- Interaction method -->
+    <div class="section">
+      <div class="text">
+        <strong>Interaction method：</strong>
+        <ul>
+          <li>You can change the way you control the fish by clicking the ‘Draw Route’ button.</li>
+          <li>When not clicking to draw lines, you can click the mouse to attract fish to gather, thereby guiding the fish to move.</li>
+          <li>Click the Draw Route button to draw a line to guide the fish school. The fish school will follow your route.</li>
+        </ul>
+      </div>
+      <img class="guide-img" src="Screenshotp1.png" alt="障碍示意图">
+      <img class="guide-img" src="Screenshot w1.png" alt="障碍示意图">
+    </div>
+
+    <div class="section">
+      <div class="text">
+        <strong>Avoid obstacles</strong>
+        <ul>
+          <li>steep mountain peaks</li>
+          <li>High-speed rotating windmill</li>
+        </ul>
+      </div>
+      <img class="guide-img" src="Screenshot obs.png" alt="障碍物示意图">
+    </div>
+
+    <div class="section">
+      <div class="text">
+        <strong>Collect items</strong>
+        <ul>
+          <li>yellow fruit（Every time the school of fish collects a yellow fruit, another fish joins the school.）</li>
+        </ul>
+      </div>
+      <img class="guide-img" src="image.png" alt="黄色果实示意图">
+    </div>
+    <div class="section full-text">
+      <strong>Conditions for success</strong>
+      <ul><li>At least 80% of migratory birds safely reach their destination</li></ul>
+      
+    </div>
+    <div class="section full-text">
+      <strong>Failure conditions</strong>
+      <ul><li>Survival rate below 80% or timeout</li></ul>
+      
+    </div>
+
+    <div class="loader">
+      <div class="progress" id="progressBar"></div>
+      <div class="label">Downloading...</div>
+    </div>
+    <button id="startBtn">Start the game</button>
+  </div>
+
+  <script>
+    window.addEventListener('load', () => {
+      const progress = document.getElementById('progressBar');
+      const label = document.querySelector('.loader .label');
+      const btn = document.getElementById('startBtn');
+      // 启动进度条动画
+      setTimeout(() => progress.style.width = '100%', 50);
+      // 8秒后隐藏下载文字，显示按钮
+      setTimeout(() => {
+        label.style.display = 'none';
+        btn.style.display = 'block';
+      }, 8050);
+      btn.addEventListener('click', () => window.location.href = 'challenge1.html');
+    });
+  </script>
+</body>
+</html>

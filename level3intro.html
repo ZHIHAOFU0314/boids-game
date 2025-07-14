@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Level 3: Deep Sea Exploration (Migration) - Level Description</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      /* 深海蓝渐变 */
+      background: linear-gradient(180deg, #0B1D3A 0%, #16425B 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    .container {
+      width: 80%;
+      max-width: 800px;
+      background: #112A42;       /* 深海容器背景 */
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+      padding: 24px;
+      color: #E0F7FA;            /* 浅海水文字 */
+      position: relative;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+    h1 {
+      margin-top: 0;
+      color: #A5D8FF;
+      text-align: center;
+    }
+    .section {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+    .section.full-text .text {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+    .section .text {
+      flex: 1 1 55%;
+      max-width: 55%;
+    }
+    .section .guide-img {
+      flex: 1 1 40%;
+      max-width: 40%;
+      border-radius: 8px;
+      margin-left: 16px;
+      object-fit: cover;
+      border: 1px solid rgba(224,247,250,0.3);
+    }
+    .section strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #72E2FF;
+    }
+
+    .loader {
+      position: relative;
+      width: 100%;
+      height: 16px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 32px 0 16px;
+    }
+    .loader .progress {
+      width: 0%;
+      height: 100%;
+      background: #0CAEA0;
+      transition: width 8s linear;
+    }
+    .loader .label {
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      color: #E0F7FA;
+      font-size: 12px;
+      line-height: 16px;
+    }
+    #startBtn {
+  display: none;         /* 初始隐藏 */
+  padding: 12px 32px;
+  background: #0CAEA0;
+  color: #112A42;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 0 auto;        /* 让它居中 */
+  /* remove display:block; */
+}
+    #startBtn:hover {
+      background: #088F80;
+    }
+    ul {
+      padding-left: 1em;
+    }
+    li {
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Level 3: Deep Sea Exploration (Migration)</h1>
+
+    <!-- 故事背景 -->
+    <div class="section full-text">
+      <div class="text">
+        <strong>Round introduce：</strong>
+        <p>In the deep sea, schools of fish begin a migration of hundreds
+             of kilometres in search of new breeding grounds. 
+            You have sixty seconds to guide them through the deep sea, 
+            avoiding jellyfish and predators, while collecting yellow fruits to 
+            expand the size of the school and ultimately reach the green destination.</p>
+      </div>
+    </div>
+    
+    <!-- Interaction method -->
+    <div class="section">
+      <div class="text">
+        <strong>Interaction method：</strong>
+        <ul>
+          <li>You can change the way you control the fish by clicking the ‘Draw Route’ button.</li>
+          <li>When not clicking to draw lines, you can click the mouse to attract fish to gather, thereby guiding the fish to move.</li>
+          <li>Click the Draw Route button to draw a line to guide the fish school. The fish school will follow your route.</li>
+        </ul>
+      </div>
+      <img class="guide-img" src="Screenshotp1.png" alt="障碍示意图">
+      <img class="guide-img" src="Screenshot w1.png" alt="障碍示意图">
+    </div>
+
+    <!-- 躲避障碍 -->
+    <div class="section">
+      <div class="text">
+        <strong>Avoid obstacles：</strong>
+        <ul>
+          <li>Jellyfish</li>
+          <li>Hunter</li>
+          <li>Be careful of deep-sea earthquakes.（This will cause the fish to scatter.）</li>
+        </ul>
+      </div>
+      <img class="guide-img" src="Screenshot pro1.png" alt="障碍示意图">
+    </div>
+
+    <!-- 收集道具 -->
+    <div class="section">
+      <div class="text">
+        <strong>Collect items：</strong>
+        <ul>
+          <li>yellow fruit（Every time the school of fish collects a yellow fruit, another fish joins the school.）</li>
+        </ul>
+      </div>
+      <img class="guide-img" src="Screenshot yp2.png" alt="道具示意图">
+    </div>
+
+    <!-- 成功/失败条件 -->
+    <div class="section full-text">
+      <div class="text">
+        <strong>Conditions for success：</strong>
+        <ul>
+          <li>At least 60% of the fish safely reach the green circle finish line.</li>
+        </ul>
+        <strong>failure criteria：</strong>
+        <ul>
+          <li>Survival rate below 60% or migration timeout.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 加载条 -->
+    <div class="loader">
+      <div class="progress" id="progressBar"></div>
+      <div class="label">downloading...</div>
+    </div>
+
+    <!-- 开始按钮 -->
+    <button id="startBtn">starting game</button>
+  </div>
+
+  <script>
+    window.addEventListener('load', () => {
+      const progress = document.getElementById('progressBar');
+      const label = document.querySelector('.loader .label');
+      const btn = document.getElementById('startBtn');
+      // 延迟启动 8 秒进度条
+      setTimeout(() => progress.style.width = '100%', 50);
+      // 8 秒后切换到“开始游戏”按钮
+      setTimeout(() => {
+        label.style.display = 'none';
+        btn.style.display = 'block';
+      }, 8050);
+      btn.addEventListener('click', () => {
+        window.location.href = 'challenge3.html';
+      });
+    });
+  </script>
+</body>
+</html>

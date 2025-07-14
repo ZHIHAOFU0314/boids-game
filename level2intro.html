@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>第二关：虹鳟溯溪而上 - 关卡说明</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      /* 淡蓝渐变 */
+      background: linear-gradient(180deg, #A0D8F1 0%, #E0F7FA 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+    .container {
+      width: 80%;
+      max-width: 800px;
+      background: #EAD7B7; /* 浅木纹色，比按钮 (#D2B48C) 更浅 */
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+      padding: 24px;
+      color: #4A2C0A;      /* 深木纹文字 */
+      position: relative;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+    h1 {
+      margin-top: 0;
+      color: #FFF;
+      text-align: center;
+    }
+    .section {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+    /* 故事背景占满全宽 */
+    .section.full-text .text {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+    .section .text {
+      flex: 1 1 55%;
+      max-width: 55%;
+    }
+    .section .guide-img {
+      flex: 1 1 40%;
+      max-width: 40%;
+      border-radius: 8px;
+      margin-left: 16px;
+      object-fit: cover;
+    }
+    .section strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #FFEB99;
+    }
+
+    .loader {
+      position: relative;
+      width: 100%;
+      height: 16px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 32px 0 16px;
+    }
+    .loader .progress {
+      width: 0%;
+      height: 100%;
+      background: #4caf50;
+      transition: width 8s linear;
+    }
+    .loader .label {
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      color: #fff;
+      font-size: 12px;
+      line-height: 16px;
+    }
+    #startBtn {
+      display: none;
+      padding: 12px 32px;
+      background: #D2B48C;    /* 淡木色 */
+      color: #4A2C0A;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 0 auto;
+      
+    }
+    #startBtn:hover {
+      background: #C19A6B;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Second level: Rainbow trout swimming upstream</h1>
+
+    <!-- 故事背景 -->
+    <div class="section full-text">
+      <div class="text">
+        <strong>Round introduce</strong>
+        <p>In this level, rainbow trout swim upstream, struggling through the turbulent stream and floating logs, 
+          heading towards the safe habitat upstream. You need to guide them to avoid rocks and logs within 45 seconds, 
+          collect rare yellow fruits in the water to increase the number of fish, and finally reach the green circle finish line.</p>
+      </div>
+    </div>
+    
+    <!-- Interaction method -->
+    <div class="section">
+      <div class="text">
+        <strong>Interaction method：</strong>
+        <ul>
+          <li>You can change the way you control the fish by clicking the ‘Draw Route’ button.</li>
+          <li>When not clicking to draw lines, you can click the mouse to attract fish to gather, thereby guiding the fish to move.</li>
+          <li>Click the Draw Route button to draw a line to guide the fish school. The fish school will follow your route.</li>
+        </ul>
+      </div>
+      <img class="guide-img" src="Screenshotp1.png" alt="障碍示意图">
+      <img class="guide-img" src="Screenshot w1.png" alt="障碍示意图">
+    </div>
+
+    <!-- 躲避障碍 -->
+    <div class="section">
+      <div class="text">
+        <strong>Avoid obstacles</strong>
+        <ul>
+          <li>Floating rocks</li>
+          <li>Floating wooden stakes</li>
+        </ul>
+      </div>
+      <!-- 假图占位，后面替换成真图 -->
+      <img class="guide-img" src="Screenshot sto.png" alt= "障碍示意图" >
+    </div>
+
+    <!-- 收集道具 -->
+    <div class="section">
+      <div class="text">
+        <strong>Collect items</strong>
+        <ul><li>yellow fruit（Every time the school of fish collects a yellow fruit, another fish joins the school.）</li></ul>
+        
+      </div>
+      <img class="guide-img" src="Screenshot po.png" alt="道具">
+    </div>
+
+    <!-- 成功/失败条件 -->
+    <div class="section">
+      <strong>Conditions for success</strong>
+      <br>
+      <ul><li>At least 50% of the fish reached the finish line within 45 seconds.</li></ul>
+      
+    </div>
+    <div class="section">
+      <strong>Failure conditions</strong>
+      <br>
+      <ul><li>Survival rate below 50% or timeout</li></ul>
+      
+    </div>
+
+    <!-- 加载条 -->
+    <div class="loader">
+      <div class="progress" id="progressBar"></div>
+      <div class="label">Downloading...</div>
+    </div>
+
+    <!-- 开始按钮 -->
+    <button id="startBtn">Start the game</button>
+  </div>
+
+  <script>
+    window.addEventListener('load', () => {
+      const progress = document.getElementById('progressBar');
+      const label = document.querySelector('.loader .label');
+      const btn = document.getElementById('startBtn');
+      // 启动 8 秒动画
+      setTimeout(() => progress.style.width = '100%', 50);
+      // 8 秒后隐藏文字，显示按钮
+      setTimeout(() => {
+        label.style.display = 'none';
+        btn.style.display = 'block';
+      }, 8050);
+      btn.addEventListener('click', () => {
+        window.location.href = 'challenge2.html';
+      });
+    });
+  </script>
+</body>
+</html>
